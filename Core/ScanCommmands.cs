@@ -14,5 +14,17 @@ namespace Core
         public String ProcessName { get; set; }
         public String TitleStartsWith { get; set; }
         public List<String> KeysToSend { get; set; }
+
+        public bool Equals(ScanCommmands other)
+        {
+            if (other == null)
+                return false;
+            if (base.Equals(other))
+                return true;
+            return DisplayName == other.DisplayName
+                && ProcessName == other.ProcessName
+                && TitleStartsWith == other.TitleStartsWith
+                && String.Join("#", KeysToSend) == String.Join("#", other.KeysToSend);
+        }
     }
 }
