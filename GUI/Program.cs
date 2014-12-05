@@ -15,19 +15,16 @@ namespace GUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //var store = GetStore();
-            var store = GetInMemoryStore();
+            var store = new XmlStore();
+            //var store = new InMemoryStore();
+            if(store.AllCommands.Count == 0)
+                InitializeWithExampleValues(store);
+
             Application.Run(new FormScannerStub(store));
         }
 
-        private static IStore GetStore()
+        private static void InitializeWithExampleValues(IStore store)
         {
-            return new XmlStore();
-        }
-
-        private static InMemoryStore GetInMemoryStore()
-        {
-            var store = new InMemoryStore();
             store.Save(new ScanCommmands
             {
                 DisplayName = "Demo 2014-11-06",
@@ -62,7 +59,6 @@ namespace GUI
                     "KTL081047{ENTER}",
                 }
             });
-            return store;
         }
     }
 }
