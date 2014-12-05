@@ -15,10 +15,17 @@ namespace GUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormScannerStub(GetStore()));
+            //var store = GetStore();
+            var store = GetInMemoryStore();
+            Application.Run(new FormScannerStub(store));
         }
 
-        private static InMemoryStore GetStore()
+        private static IStore GetStore()
+        {
+            return new XmlStore();
+        }
+
+        private static InMemoryStore GetInMemoryStore()
         {
             var store = new InMemoryStore();
             store.Save(new ScanCommmands
