@@ -3,7 +3,7 @@ using Core;
 
 namespace GUI
 {
-    internal class InMemoryStore : IStore
+    public class InMemoryStore : IStore
     {
         public InMemoryStore()
         {

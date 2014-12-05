@@ -15,16 +15,28 @@ namespace Core
         public String TitleStartsWith { get; set; }
         public List<String> KeysToSend { get; set; }
 
-        public bool Equals(ScanCommmands other)
+        private String getKeysToSendAsString()
         {
+            return String.Join("#", KeysToSend);
+        }
+
+        public override bool Equals(object o)
+        {
+            var other = o as ScanCommmands;
             if (other == null)
-                return false;
-            if (base.Equals(other))
-                return true;
+                return base.Equals(o);
+
             return DisplayName == other.DisplayName
                 && ProcessName == other.ProcessName
                 && TitleStartsWith == other.TitleStartsWith
-                && String.Join("#", KeysToSend) == String.Join("#", other.KeysToSend);
+                && getKeysToSendAsString() == other.getKeysToSendAsString();
+        }
+
+        public override int GetHashCode()
+        {
+            return
+                String.Format("{0}/{1}/{2}/{3}", DisplayName, ProcessName, TitleStartsWith, getKeysToSendAsString())
+                    .GetHashCode();
         }
     }
 }

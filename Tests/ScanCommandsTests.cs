@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Core;
-using GUI;
 using NUnit.Framework;
 
 namespace Tests
@@ -26,14 +25,6 @@ namespace Tests
             Assert.IsFalse(item.Equals(null));
         }
 
-        private void SetProperties(ScanCommmands item, string postfix)
-        {
-            item.DisplayName = "DisplayName" + postfix;
-            item.KeysToSend = new List<string> { "KeysToSend" + postfix };
-            item.ProcessName = "ProcessName" + postfix;
-            item.TitleStartsWith = "TitleStartsWith" + postfix;
-        }
-
         [Test]
         public void TwoDifferentItems_Equals_NotEqual()
         {
@@ -44,6 +35,7 @@ namespace Tests
             SetProperties(secondItem, "2");
 
             Assert.IsFalse(firstItem.Equals(secondItem));
+            Assert.AreNotEqual(firstItem.GetHashCode(), secondItem.GetHashCode());
         }
 
         [Test]
@@ -56,6 +48,16 @@ namespace Tests
             SetProperties(secondItem, "");
 
             Assert.IsTrue(firstItem.Equals(secondItem));
+            Assert.AreEqual(firstItem.GetHashCode(), secondItem.GetHashCode());
+        }
+        
+        public static ScanCommmands SetProperties(ScanCommmands item, string postfix)
+        {
+            item.DisplayName = "DisplayName" + postfix;
+            item.KeysToSend = new List<string> { "KeysToSend" + postfix };
+            item.ProcessName = "ProcessName" + postfix;
+            item.TitleStartsWith = "TitleStartsWith" + postfix;
+            return item;
         }
     }
 }
