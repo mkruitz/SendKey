@@ -33,6 +33,18 @@ namespace Tests
         }
 
         [Test]
+        public void CreateNewStore_AddOneItemWithoutKeysToSend_OneItemInStore()
+        {
+            var item = CreateScanCommmand();
+            item.KeysToSend.Clear();
+
+            _store.Save(item);
+
+            Assert.AreEqual(1, _store.AllCommands.Count);
+            Assert.AreEqual(item, _store.AllCommands[0]);
+        }
+
+        [Test]
         public void CreateSecondStoreWithXmlOnSameLocation_AddOneItem_ReadOneItemFromSecondStore()
         {
             CreateNewStore_AddOneItem_OneItemInStore(_store);

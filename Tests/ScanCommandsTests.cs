@@ -54,7 +54,7 @@ namespace Tests
         public static ScanCommmands SetProperties(ScanCommmands item, string postfix)
         {
             item.DisplayName = "DisplayName" + postfix;
-            item.KeysToSend = new List<string> { "KeysToSend" + postfix };
+            item.KeysToSend = new List<string> { "KeysToSend" + postfix, "KeysToSend-2-" + postfix };
             item.ProcessName = "ProcessName" + postfix;
             item.TitleStartsWith = "TitleStartsWith" + postfix;
             return item;

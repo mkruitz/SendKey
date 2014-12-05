@@ -18,7 +18,7 @@ namespace Tests
             store.Save(item);
 
             Assert.AreEqual(1, store.AllCommands.Count);
-            Assert.IsTrue(item.Equals(store.AllCommands[0]));
+            Assert.AreEqual(item, store.AllCommands[0]);
         }
 
         protected void CreateNewStore_TwoDifferentItems_TwoItemsInStoreLastAddedItemIsFirstInList(IStore store)
@@ -30,8 +30,8 @@ namespace Tests
             store.Save(secondItem);
 
             Assert.AreEqual(2, store.AllCommands.Count);
-            Assert.IsTrue(secondItem.Equals(store.AllCommands[0]));
-            Assert.IsTrue(firstItem.Equals(store.AllCommands[1]));
+            Assert.AreEqual(secondItem, store.AllCommands[0]);
+            Assert.AreEqual(firstItem, store.AllCommands[1]);
         }
 
         protected void CreateNewStore_TwoDifferentItemsSameInternals_OneItem(IStore store)
@@ -42,11 +42,11 @@ namespace Tests
             store.Save(firstItem);
             store.Save(secondItem);
 
-            Assert.IsTrue(firstItem.Equals(secondItem));
+            Assert.AreEqual(firstItem, secondItem);
             Assert.AreEqual(1, store.AllCommands.Count);
         }
 
-        private ScanCommmands CreateScanCommmand(String postFix = "")
+        protected ScanCommmands CreateScanCommmand(String postFix = "")
         {
             return ScanCommandsTests.SetProperties(new ScanCommmands(), postFix);
         }

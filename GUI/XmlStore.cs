@@ -23,24 +23,7 @@ namespace GUI
             return ListFromXml(document.Root);
         }
 
-        private XElement ToXml(IEnumerable<ScanCommmands> allCommands)
-        {
-            return new XElement("Commands", allCommands.Select(ToXml));
-        }
-
-        private XElement ToXml(ScanCommmands scanCommmands)
-        {
-            var flatttendKeysToSend = String.Join(Environment.NewLine, scanCommmands.KeysToSend);
-            return new XElement(
-                "ScanCommand",
-                new XAttribute("DisplayName", scanCommmands.DisplayName),
-                new XAttribute("ProcessName", scanCommmands.ProcessName),
-                new XAttribute("TitleStartsWith", scanCommmands.TitleStartsWith),
-                flatttendKeysToSend
-                );
-        }
-
-        private IList<ScanCommmands> ListFromXml(XElement element)
+        private IList<ScanCommmands> ListFromXml(XContainer element)
         {
             return element.Elements("ScanCommand")
                 .Select(ItemFromXml)
@@ -49,14 +32,17 @@ namespace GUI
 
         private ScanCommmands ItemFromXml(XElement element)
         {
-            var keysToSend =
-                element.Value.Split(new string[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries).ToList();
             return new ScanCommmands{
                 DisplayName = element.Attribute("DisplayName").Value,
                 ProcessName = element.Attribute("ProcessName").Value,
                 TitleStartsWith = element.Attribute("TitleStartsWith").Value,
-                KeysToSend = keysToSend
+                KeysToSend = element.Elements("KeysToSend").Select(KeysToSendFromXml).ToList()
             };
+        }
+
+        private String KeysToSendFromXml(XElement element)
+        {
+            return element.Value;
         }
 
         public void Save(ScanCommmands scanCommmands)
@@ -65,10 +51,31 @@ namespace GUI
 
             if (!list.Contains(scanCommmands))
             {
-            list.Insert(0, scanCommmands);
-            ToXml(list)
-                .Save(StoreLocation, SaveOptions.None);
+                list.Insert(0, scanCommmands);
+                ToXml(list)
+                    .Save(StoreLocation, SaveOptions.None);
             }
+        }
+
+        private XElement ToXml(IEnumerable<ScanCommmands> allCommands)
+        {
+            return new XElement("Commands", allCommands.Select(ToXml));
+        }
+
+        private XElement ToXml(ScanCommmands scanCommmands)
+        {
+            return new XElement(
+                "ScanCommand",
+                new XAttribute("DisplayName", scanCommmands.DisplayName),
+                new XAttribute("ProcessName", scanCommmands.ProcessName),
+                new XAttribute("TitleStartsWith", scanCommmands.TitleStartsWith),
+                scanCommmands.KeysToSend.Select(ToXml)
+                );
+        }
+
+        private XElement ToXml(String keysToSend)
+        {
+            return new XElement("KeysToSend", keysToSend);
         }
     }
 }
