@@ -24,7 +24,7 @@ namespace Core
         {
             var other = o as ScanCommmands;
             if (other == null)
-                return base.Equals(o);
+                return false;
 
             return DisplayName == other.DisplayName
                 && ProcessName == other.ProcessName
