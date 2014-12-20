@@ -15,7 +15,7 @@ namespace Core
         public String TitleStartsWith { get; set; }
         public List<String> KeysToSend { get; set; }
 
-        private String getKeysToSendAsString()
+        private String GetKeysToSendAsString()
         {
             return String.Join("#", KeysToSend);
         }
@@ -29,13 +29,13 @@ namespace Core
             return DisplayName == other.DisplayName
                 && ProcessName == other.ProcessName
                 && TitleStartsWith == other.TitleStartsWith
-                && getKeysToSendAsString() == other.getKeysToSendAsString();
+                && GetKeysToSendAsString() == other.GetKeysToSendAsString();
         }
 
         public override int GetHashCode()
         {
             return
-                String.Format("{0}/{1}/{2}/{3}", DisplayName, ProcessName, TitleStartsWith, getKeysToSendAsString())
+                String.Format("{0}/{1}/{2}/{3}", DisplayName, ProcessName, TitleStartsWith, GetKeysToSendAsString())
                     .GetHashCode();
         }
     }

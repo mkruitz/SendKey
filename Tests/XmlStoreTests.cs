@@ -8,12 +8,12 @@ namespace Tests
     [TestFixture]
     public class XmlStoreTests : StoreBaseTests
     {
-        private IStore _store;
+        private IStore store;
 
         [SetUp]
         public void SetUp()
         {
-            _store = new XmlStore();
+            store = new XmlStore();
             if (File.Exists("store.xml"))
             {
                 File.Delete("store.xml");
@@ -23,13 +23,13 @@ namespace Tests
         [Test]
         public void CreateNewStore_GetAllCommands_NonInStore()
         {
-            CreateNewStore_GetAllCommands_NonInStore(_store);
+            CreateNewStore_GetAllCommands_NonInStore(store);
         }
 
         [Test]
         public void CreateNewStore_AddOneItem_OneItemInStore()
         {
-            CreateNewStore_AddOneItem_OneItemInStore(_store);
+            CreateNewStore_AddOneItem_OneItemInStore(store);
         }
 
         [Test]
@@ -38,16 +38,16 @@ namespace Tests
             var item = CreateScanCommmand();
             item.KeysToSend.Clear();
 
-            _store.Save(item);
+            store.Save(item);
 
-            Assert.AreEqual(1, _store.AllCommands.Count);
-            Assert.AreEqual(item, _store.AllCommands[0]);
+            Assert.AreEqual(1, store.AllCommands.Count);
+            Assert.AreEqual(item, store.AllCommands[0]);
         }
 
         [Test]
         public void CreateSecondStoreWithXmlOnSameLocation_AddOneItem_ReadOneItemFromSecondStore()
         {
-            CreateNewStore_AddOneItem_OneItemInStore(_store);
+            CreateNewStore_AddOneItem_OneItemInStore(store);
 
             var secondStore = new XmlStore();
             Assert.AreEqual(1, secondStore.AllCommands.Count);
@@ -56,13 +56,13 @@ namespace Tests
         [Test]
         public void CreateNewStore_TwoDifferentItems_TwoItemsInStoreLastAddedItemIsFirstInList()
         {
-            CreateNewStore_TwoDifferentItems_TwoItemsInStoreLastAddedItemIsFirstInList(_store);
+            CreateNewStore_TwoDifferentItems_TwoItemsInStoreLastAddedItemIsFirstInList(store);
         }
 
         [Test]
         public void CreateNewStore_TwoDifferentItemsSameInternals_OneItem()
         {
-            CreateNewStore_TwoDifferentItemsSameInternals_OneItem(_store);
+            CreateNewStore_TwoDifferentItemsSameInternals_OneItem(store);
         }
     }
 }

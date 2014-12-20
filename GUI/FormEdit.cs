@@ -12,17 +12,17 @@ namespace GUI
             InitializeComponent();
         }
 
-        private ScanCommmands _scanCommmands;
+        private ScanCommmands scanCommmands;
 
         public ScanCommmands ScanCommands
         {
             get
             {
-                return _scanCommmands;
+                return scanCommmands;
             }
             set
             {
-                _scanCommmands = value ?? new ScanCommmands();
+                scanCommmands = value ?? new ScanCommmands();
                 SetValues();
             }
         }
@@ -31,29 +31,29 @@ namespace GUI
 
         private void SaveValues()
         {
-            _scanCommmands.DisplayName = textBoxSetName.Text;
+            scanCommmands.DisplayName = textBoxSetName.Text;
 
             var splittedLines = textBoxKeysToSend.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-            _scanCommmands.KeysToSend.Clear();
-            _scanCommmands.KeysToSend.AddRange(splittedLines);
-            _scanCommmands.ProcessName = textBoxProcessName.Text;
-            _scanCommmands.TitleStartsWith = textBoxTitleStartsWith.Text;
+            scanCommmands.KeysToSend.Clear();
+            scanCommmands.KeysToSend.AddRange(splittedLines);
+            scanCommmands.ProcessName = textBoxProcessName.Text;
+            scanCommmands.TitleStartsWith = textBoxTitleStartsWith.Text;
         }
 
         private void SetValues()
         {
-            textBoxSetName.Text = _scanCommmands.DisplayName;
+            textBoxSetName.Text = scanCommmands.DisplayName;
 
-            textBoxKeysToSend.Text = String.Join(Environment.NewLine, _scanCommmands.KeysToSend);
-            textBoxProcessName.Text = _scanCommmands.ProcessName;
-            textBoxTitleStartsWith.Text = _scanCommmands.TitleStartsWith;
+            textBoxKeysToSend.Text = String.Join(Environment.NewLine, scanCommmands.KeysToSend);
+            textBoxProcessName.Text = scanCommmands.ProcessName;
+            textBoxTitleStartsWith.Text = scanCommmands.TitleStartsWith;
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
             SaveValues();
-            Store.Save(_scanCommmands);
+            Store.Save(scanCommmands);
             Close();
         }
     }

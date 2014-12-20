@@ -6,11 +6,11 @@ namespace GUI
 {
     public partial class FormScannerStub : Form
     {
-        private readonly IStore _store;
+        private readonly IStore store;
 
         public FormScannerStub(IStore store)
         {
-            _store = store;
+            this.store = store;
             InitializeComponent();
             InitializeComboBox();
         }
@@ -18,7 +18,7 @@ namespace GUI
         private void InitializeComboBox()
         {
             comboBoxScanSets.DataSource = null;
-            comboBoxScanSets.DataSource = _store.AllCommands;
+            comboBoxScanSets.DataSource = store.AllCommands;
             comboBoxScanSets.DisplayMember = "DisplayName";
         }
 
@@ -47,7 +47,7 @@ namespace GUI
         {
             var form = new FormEdit
             {
-                Store = _store,
+                Store = store,
                 ScanCommands = scanCommmands
             };
             if (form.ShowDialog() == DialogResult.OK)
