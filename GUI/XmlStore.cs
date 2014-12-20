@@ -9,7 +9,7 @@ namespace GUI
 {
     public class XmlStore : IStore
     {
-        private const string StoreLocation = "store.xml";
+        public const string StoreLocation = "store.xml";
 
         public IList<ScanCommmands> AllCommands { get { return ReadFromFile(); } }
         
