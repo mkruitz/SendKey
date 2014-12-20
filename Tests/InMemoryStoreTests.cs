@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using System.Linq;
+using Core;
 using GUI;
 using NUnit.Framework;
 
@@ -13,6 +14,35 @@ namespace Tests
         public void SetUp()
         {
             store = new InMemoryStore();
+        }
+
+        [Test]
+        public void NewStore_Exists_False()
+        {
+            Assert.IsFalse(store.Exists());
+        }
+
+        [Test]
+        public void NewStoreAddOneItem_Exists_True()
+        {
+            store.Save(CreateScanCommmand());
+            Assert.IsTrue(store.Exists());
+        }
+
+        [Test]
+        public void NonExistingStore_Reset_DoesNotThrow()
+        {
+            Assert.DoesNotThrow(store.Reset);
+        }
+
+        [Test]
+        public void ExistingStore_Reset_StoreIsEmpty()
+        {
+            store.Save(CreateScanCommmand());
+
+            store.Reset();
+            Assert.IsFalse(store.Exists());
+            Assert.IsFalse(store.AllCommands.Any());
         }
 
         [Test]

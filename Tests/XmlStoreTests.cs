@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using Core;
 using GUI;
 using NUnit.Framework;
@@ -14,10 +15,36 @@ namespace Tests
         public void SetUp()
         {
             store = new XmlStore();
-            if (File.Exists("store.xml"))
-            {
-                File.Delete("store.xml");
-            }
+            store.Reset();
+        }
+
+        [Test]
+        public void NewStore_Exists_False()
+        {
+            Assert.IsFalse(store.Exists());
+        }
+
+        [Test]
+        public void NewStoreAddOneItem_Exists_True()
+        {
+            store.Save(CreateScanCommmand());
+            Assert.IsTrue(store.Exists());
+        }
+
+        [Test]
+        public void NonExistingStore_Reset_DoesNotThrow()
+        {
+            Assert.DoesNotThrow(store.Reset);
+        }
+
+        [Test]
+        public void ExistingStore_Reset_StoreIsEmpty()
+        {
+            store.Save(CreateScanCommmand());
+
+            store.Reset();
+            Assert.IsFalse(store.Exists());
+            Assert.IsFalse(store.AllCommands.Any());
         }
 
         [Test]

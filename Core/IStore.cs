@@ -6,5 +6,7 @@ namespace Core
     {
         void Save(ScanCommmands scanCommmands);
         IList<ScanCommmands> AllCommands { get; }
+        bool Exists();
+        void Reset();
     }
 }

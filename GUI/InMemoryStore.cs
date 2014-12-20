@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Core;
 
 namespace GUI
@@ -7,7 +8,7 @@ namespace GUI
     {
         public InMemoryStore()
         {
-            AllCommands = new List<ScanCommmands>();
+            Reset();
         }
 
         public void Save(ScanCommmands scanCommmands)
@@ -19,5 +20,15 @@ namespace GUI
         }
 
         public IList<ScanCommmands> AllCommands { get; private set; }
+        
+        public bool Exists()
+        {
+            return AllCommands.Any();
+        }
+
+        public void Reset()
+        {
+            AllCommands = new List<ScanCommmands>();
+        }
     }
 }

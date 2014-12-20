@@ -12,6 +12,16 @@ namespace GUI
         private const string StoreLocation = "store.xml";
 
         public IList<ScanCommmands> AllCommands { get { return ReadFromFile(); } }
+        
+        public bool Exists()
+        {
+            return File.Exists(StoreLocation);
+        }
+
+        public void Reset()
+        {
+            File.Delete(StoreLocation);
+        }
 
         private IList<ScanCommmands> ReadFromFile()
         {
