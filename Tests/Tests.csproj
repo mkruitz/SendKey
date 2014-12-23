@@ -42,7 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="XmlStoreTests.cs" />
+    <Compile Include="Xml\XmlStoreVersionTests.cs" />
+    <Compile Include="Xml\XmlStoreTests.cs" />
     <Compile Include="InMemoryStoreTests.cs">
       <SubType>Code</SubType>
     </Compile>

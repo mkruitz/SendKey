@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="XmlStore.cs" />
+    <Compile Include="Xml\XmlStore.cs" />
     <Compile Include="InMemoryStore.cs" />
     <Compile Include="FormEdit.cs">
       <SubType>Form</SubType>
