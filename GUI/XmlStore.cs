@@ -9,9 +9,20 @@ namespace GUI
 {
     public class XmlStore : IStore
     {
+        private class Stored
+        {
+            public Stored()
+            {
+                Commands = new List<ScanCommmands>();
+            }
+
+            public Version Version { get; set; }
+            public IList<ScanCommmands> Commands { get; set; } 
+        }
+
         public const string StoreLocation = "store.xml";
 
-        public IList<ScanCommmands> AllCommands { get { return ReadFromFile(); } }
+        public IList<ScanCommmands> AllCommands { get { return ReadFromFile().Commands; } }
         
         public bool Exists()
         {
@@ -23,21 +34,32 @@ namespace GUI
             File.Delete(StoreLocation);
         }
 
-        private IList<ScanCommmands> ReadFromFile()
+        private Stored ReadFromFile()
         {
-            var commands = new List<ScanCommmands>();
             if (!File.Exists(StoreLocation))
-                return commands;
+                return new Stored();
 
             var document = XDocument.Load(StoreLocation);
-            return ListFromXml(document.Root);
+            return FromXml(document.Root);
         }
 
-        private IList<ScanCommmands> ListFromXml(XContainer element)
+        private Stored FromXml(XElement element)
         {
-            return element.Elements("ScanCommand")
-                .Select(ItemFromXml)
-                .ToList();
+            return new Stored
+            {
+                Commands = element.Elements("ScanCommand")
+                                .Select(ItemFromXml)
+                                .ToList(),
+                Version = ExtractVersion(element)
+            };
+        }
+
+        private Version ExtractVersion(XElement element)
+        {
+            var attribute = element.Attribute("Version");
+            return attribute == null
+                ? new Version(0, 0)
+                : Version.Parse(attribute.Value);
         }
 
         private ScanCommmands ItemFromXml(XElement element)
@@ -86,6 +108,11 @@ namespace GUI
         private XElement ToXml(String keysToSend)
         {
             return new XElement("KeysToSend", keysToSend);
+        }
+
+        public Version GetStoreVersion()
+        {
+            return ReadFromFile().Version;
         }
     }
 }

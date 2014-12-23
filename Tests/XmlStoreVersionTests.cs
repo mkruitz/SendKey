@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Core;
@@ -33,17 +34,50 @@ namespace Tests
         public void HasOneScanCommandElement_ReadStore_ReturnOneElement()
         {
             text.AppendLine("<Commands>");
-            text.AppendLine("<ScanCommand DisplayName=\"A\" ProcessName=\"B\" TitleStartsWith=\"C\">");
-            text.AppendLine("<KeysToSend>D</KeysToSend>");
-            text.AppendLine("<KeysToSend>E</KeysToSend>");
-            text.AppendLine("</ScanCommand>");
+            AddScanCommand(text);
             text.AppendLine("</Commands>");
             SaveText();
 
             var store = new XmlStore();
             Assert.IsTrue(store.Exists());
+            Assert.AreEqual(new Version(0, 0), store.GetStoreVersion());
             Assert.AreEqual(1, store.AllCommands.Count());
             AssertSingleItem(store.AllCommands.First());
+        }
+
+        [Test]
+        public void HasTwoScanCommandElement_ReadStore_ReturnTwoElements()
+        {
+            text.AppendLine("<Commands>");
+            AddScanCommand(text);
+            AddScanCommand(text);
+            text.AppendLine("</Commands>");
+            SaveText();
+
+            var store = new XmlStore();
+            Assert.IsTrue(store.Exists());
+            Assert.AreEqual(2, store.AllCommands.Count());
+        }
+
+        [Test]
+        public void HasOneScanCommandElementWithVersion_ReadStore_ReturnOneElement()
+        {
+            text.AppendLine("<Commands Version=\"12.3\">");
+            text.AppendLine("</Commands>");
+            SaveText();
+
+            var store = new XmlStore();
+            Assert.IsTrue(store.Exists());
+            Assert.AreEqual(new Version(12, 3), store.GetStoreVersion());
+            Assert.AreEqual(0, store.AllCommands.Count());
+        }
+        
+        private void AddScanCommand(StringBuilder sb)
+        {
+            sb.AppendLine("<ScanCommand DisplayName=\"A\" ProcessName=\"B\" TitleStartsWith=\"C\">");
+            sb.AppendLine("<KeysToSend>D</KeysToSend>");
+            sb.AppendLine("<KeysToSend>E</KeysToSend>");
+            sb.AppendLine("</ScanCommand>");
         }
 
         private void SaveText()
