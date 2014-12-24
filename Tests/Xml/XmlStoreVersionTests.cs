@@ -6,10 +6,10 @@ using Core;
 using GUI;
 using NUnit.Framework;
 
-namespace Tests
+namespace Tests.Xml
 {
     [TestFixture]
-    public class XmlStoreVersionTests : StoreBaseTests
+    public class XmlStoreVersionTests
     {
         private StringBuilder text;
 
