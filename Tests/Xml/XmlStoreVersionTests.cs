@@ -40,7 +40,7 @@ namespace Tests.Xml
 
             var store = new XmlStore();
             Assert.IsTrue(store.Exists());
-            Assert.AreEqual(new Version(0, 0), store.GetStoreVersion());
+            Assert.AreEqual(new Version(1, 0), store.GetStoreVersion());
             Assert.AreEqual(1, store.AllCommands.Count());
             AssertSingleItem(store.AllCommands.First());
         }
@@ -62,13 +62,13 @@ namespace Tests.Xml
         [Test]
         public void HasOneScanCommandElementWithVersion_ReadStore_ReturnOneElement()
         {
-            text.AppendLine("<Commands Version=\"12.3\">");
+            text.AppendLine("<Commands Version=\"1.1\">");
             text.AppendLine("</Commands>");
             SaveText();
 
             var store = new XmlStore();
             Assert.IsTrue(store.Exists());
-            Assert.AreEqual(new Version(12, 3), store.GetStoreVersion());
+            Assert.AreEqual(new Version(1, 1), store.GetStoreVersion());
             Assert.AreEqual(0, store.AllCommands.Count());
         }
         

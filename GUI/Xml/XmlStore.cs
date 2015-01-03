@@ -58,7 +58,7 @@ namespace GUI
         {
             var attribute = element.Attribute("Version");
             return attribute == null
-                ? new Version(0, 0)
+                ? new Version(1, 0)
                 : Version.Parse(attribute.Value);
         }
 
