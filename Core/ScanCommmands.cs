@@ -5,15 +5,16 @@ namespace Core
 {
     public class ScanCommmands
     {
-        public ScanCommmands()
-        {
-            KeysToSend = new List<string>();
-        }
-
+        public Guid Id { get; set; }
         public String DisplayName { get; set; }
         public String ProcessName { get; set; }
         public String TitleStartsWith { get; set; }
         public List<String> KeysToSend { get; set; }
+
+        public ScanCommmands()
+        {
+            KeysToSend = new List<string>();
+        }
 
         private String GetKeysToSendAsString()
         {
