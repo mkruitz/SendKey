@@ -1,10 +1,9 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using Core;
 using GUI;
 using NUnit.Framework;
 
-namespace Tests
+namespace Tests.Xml
 {
     [TestFixture]
     public class XmlStoreTests : StoreBaseTests
