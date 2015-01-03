@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -85,6 +86,52 @@ namespace Tests.Xml
  
             AssertId("00000000-0000-0000-0000-000000000000", store.AllCommands[0]);
             AssertId("7A6BF285-BBD7-4F72-AA8F-7BA6FF85D6BD", store.AllCommands[1]);
+        }
+
+        [Test]
+        public void HasOldVersion_ReadStore_GeneratesUniqueIds()
+        {
+            text.AppendLine("<Commands>");
+            AddScanCommand(text);
+            AddScanCommand(text);
+            AddScanCommand(text);
+            AddScanCommand(text);
+            text.AppendLine("</Commands>");
+            SaveText();
+
+            var store = new XmlStore();
+
+            var ids = new HashSet<Guid>(
+                store.AllCommands.Select(command => command.Id)
+            );
+
+            Assert.AreEqual(4, ids.Count);
+        }
+
+        [Test]
+        public void HasOldVersion_SaveStore_GeneratesdUniqueIdsAreStored()
+        {
+            text.AppendLine("<Commands>");
+            AddScanCommand(text);
+            AddScanCommand(text);
+            AddScanCommand(text);
+            AddScanCommand(text);
+            text.AppendLine("</Commands>");
+            SaveText();
+
+            var store = new XmlStore();
+            var idsBeforeSave = new HashSet<Guid>(
+                store.AllCommands.Select(command => command.Id)
+            );
+
+            store.Save(store.AllCommands.First());
+
+            var idsAfterSave = new HashSet<Guid>(
+                store.AllCommands.Select(command => command.Id)
+            );
+
+            Assert.IsTrue(idsBeforeSave.IsSubsetOf(idsAfterSave));
+            Assert.IsTrue(idsAfterSave.IsSubsetOf(idsBeforeSave));
         }
 
         private void AssertId(string expectedId, ScanCommmands actualCommand)

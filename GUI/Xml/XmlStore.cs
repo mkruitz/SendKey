@@ -34,13 +34,22 @@ namespace GUI
             File.Delete(StoreLocation);
         }
 
+        private Stored cached;
         private Stored ReadFromFile()
         {
-            if (!File.Exists(StoreLocation))
-                return new Stored();
+            if (cached != null)
+                return cached;
 
-            var document = XDocument.Load(StoreLocation);
-            return FromXml(document.Root);
+            if (!Exists())
+            {
+                cached = new Stored();
+            }
+            else
+            {
+                var document = XDocument.Load(StoreLocation);
+                cached = FromXml(document.Root);
+            }
+            return cached;
         }
 
         private Stored FromXml(XElement element)
@@ -93,20 +102,25 @@ namespace GUI
             if (!list.Contains(scanCommmands))
             {
                 list.Insert(0, scanCommmands);
-                ToXml(list)
-                    .Save(StoreLocation, SaveOptions.None);
             }
+            ToXml(list)
+                .Save(StoreLocation, SaveOptions.None);
+            cached = null;
         }
 
         private XElement ToXml(IEnumerable<ScanCommmands> allCommands)
         {
-            return new XElement("Commands", allCommands.Select(ToXml));
+            return new XElement("Commands",
+                new XAttribute("Version", new Version(1, 1)),
+                    allCommands.Select(ToXml));
         }
 
         private XElement ToXml(ScanCommmands scanCommmands)
         {
             return new XElement(
                 "ScanCommand",
+                new XAttribute("Id", scanCommmands.Id.ToString()),
+                new XAttribute("Version", new Version(1, 1)),
                 new XAttribute("DisplayName", scanCommmands.DisplayName),
                 new XAttribute("ProcessName", scanCommmands.ProcessName),
                 new XAttribute("TitleStartsWith", scanCommmands.TitleStartsWith),
