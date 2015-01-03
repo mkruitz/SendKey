@@ -60,7 +60,7 @@ namespace Tests.Xml
         }
 
         [Test]
-        public void HasOneScanCommandElementWithVersion_ReadStore_ReturnOneElement()
+        public void HasNoScanCommandElementWithVersion_ReadStore_ReturnCorrectVersion()
         {
             text.AppendLine("<Commands Version=\"1.1\">");
             text.AppendLine("</Commands>");
@@ -71,10 +71,32 @@ namespace Tests.Xml
             Assert.AreEqual(new Version(1, 1), store.GetStoreVersion());
             Assert.AreEqual(0, store.AllCommands.Count());
         }
-        
-        private void AddScanCommand(StringBuilder sb)
+
+        [Test]
+        public void HasScanCommandsWithId_ReadStore_ReturnIds()
         {
-            sb.AppendLine("<ScanCommand DisplayName=\"A\" ProcessName=\"B\" TitleStartsWith=\"C\">");
+            text.AppendLine("<Commands Version=\"1.1\">");
+            AddScanCommand(text, "00000000-0000-0000-0000-000000000000");
+            AddScanCommand(text, "7A6BF285-BBD7-4F72-AA8F-7BA6FF85D6BD");
+            text.AppendLine("</Commands>");
+            SaveText();
+
+            var store = new XmlStore();
+ 
+            AssertId("00000000-0000-0000-0000-000000000000", store.AllCommands[0]);
+            AssertId("7A6BF285-BBD7-4F72-AA8F-7BA6FF85D6BD", store.AllCommands[1]);
+        }
+
+        private void AssertId(string expectedId, ScanCommmands actualCommand)
+        {
+            Assert.AreEqual(expectedId, actualCommand.Id.ToString().ToUpper());
+        }
+
+        private void AddScanCommand(StringBuilder sb, String id = "")
+        {
+            id = String.IsNullOrEmpty(id) ? String.Empty : String.Format("Id=\"{0}\"", id);
+            sb.AppendFormat("<ScanCommand {0} DisplayName=\"A\" ProcessName=\"B\" TitleStartsWith=\"C\">", id);
+            sb.AppendLine();
             sb.AppendLine("<KeysToSend>D</KeysToSend>");
             sb.AppendLine("<KeysToSend>E</KeysToSend>");
             sb.AppendLine("</ScanCommand>");

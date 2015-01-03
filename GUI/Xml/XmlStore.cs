@@ -45,12 +45,13 @@ namespace GUI
 
         private Stored FromXml(XElement element)
         {
+            var readVersion = ExtractVersion(element);
             return new Stored
             {
                 Commands = element.Elements("ScanCommand")
-                                .Select(ItemFromXml)
+                                .Select(elm => ItemFromXml(elm, readVersion))
                                 .ToList(),
-                Version = ExtractVersion(element)
+                Version = readVersion
             };
         }
 
@@ -62,14 +63,22 @@ namespace GUI
                 : Version.Parse(attribute.Value);
         }
 
-        private ScanCommmands ItemFromXml(XElement element)
+        private ScanCommmands ItemFromXml(XElement element, Version readVersion)
         {
             return new ScanCommmands{
+                Id = IdFromXml(element, readVersion),
                 DisplayName = element.Attribute("DisplayName").Value,
                 ProcessName = element.Attribute("ProcessName").Value,
                 TitleStartsWith = element.Attribute("TitleStartsWith").Value,
                 KeysToSend = element.Elements("KeysToSend").Select(KeysToSendFromXml).ToList()
             };
+        }
+
+        private Guid IdFromXml(XElement element, Version readVersion)
+        {
+            if(readVersion <= new Version(1, 0)) 
+                return Guid.NewGuid();
+            return Guid.Parse(element.Attribute("Id").Value);
         }
 
         private String KeysToSendFromXml(XElement element)
