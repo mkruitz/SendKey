@@ -88,7 +88,15 @@ namespace Tests.Xml
         [Test]
         public void CreateNewStore_TwoDifferentItemsSameInternals_OneItem()
         {
-            CreateNewStore_TwoDifferentItemsSameInternals_OneItem(store);
+            var firstItem = CreateScanCommmand();
+            var secondItem = CreateScanCommmand();
+            secondItem.Id = firstItem.Id;
+
+            store.Save(firstItem);
+            store.Save(secondItem);
+
+            Assert.AreEqual(firstItem, secondItem);
+            Assert.AreEqual(1, store.AllCommands.Count);
         }
     }
 }

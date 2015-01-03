@@ -14,6 +14,7 @@ namespace Core
         public ScanCommmands()
         {
             KeysToSend = new List<string>();
+            Id = Guid.NewGuid();
         }
 
         private String GetKeysToSendAsString()

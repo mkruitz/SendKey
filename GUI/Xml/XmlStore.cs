@@ -99,7 +99,7 @@ namespace GUI
         {
             var list = AllCommands;
 
-            if (!list.Contains(scanCommmands))
+            if (!list.Any(item => item.Id.Equals(scanCommmands.Id)))
             {
                 list.Insert(0, scanCommmands);
             }
